@@ -3,6 +3,7 @@ package com.swjd.config;
 import com.google.common.collect.Maps;
 import com.swjd.base.CaptchaFormAuthenticationFilter;
 import com.swjd.realm.AuthRealm;
+import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.SessionManager;
@@ -25,6 +26,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.DelegatingFilterProxy;
+import redis.clients.jedis.JedisPool;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
@@ -49,6 +51,9 @@ public class ShiroConfig {
     @Value("${spring.redis.password}")
     private String jedisPassword;
 
+    @Value("${spring.redis.timeout}")
+    private int timeout;
+
     @Bean
     public FilterRegistrationBean delegatingFilterProxy(){
         FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
@@ -69,10 +74,10 @@ public class ShiroConfig {
         bean.setFilters(map);
         //配置访问权限
         LinkedHashMap<String, String> filterChainDefinitionMap = Maps.newLinkedHashMap();
-        filterChainDefinitionMap.put("/log/**","anon");
-        filterChainDefinitionMap.put("/login/main","anon");
-        filterChainDefinitionMap.put("/genCaptcha","anon");
-        filterChainDefinitionMap.put("/getCaptchaVoice","anon");
+        filterChainDefinitionMap.put("/api/log/**","anon");
+        filterChainDefinitionMap.put("/api/login/main","anon");
+        filterChainDefinitionMap.put("/api/genCaptcha","anon");
+        filterChainDefinitionMap.put("/api/getCaptchaVoice","anon");
         filterChainDefinitionMap.put("/**","authc");
         bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return bean;
@@ -151,11 +156,9 @@ public class ShiroConfig {
     @Bean
     public RedisManager redisManager(){
         RedisManager manager = new RedisManager();
-        manager.setHost(jedisHost);
-        // manager.setPort(jedisPort);
-        //这里是用户session的时长 跟上面的setGlobalSessionTimeout 应该保持一直（上面是1个小时 下面是秒做单位的 我们设置成3600）
-        // manager.setExpire(60 * 60);
-        manager.setPassword(jedisPassword);
+        GenericObjectPoolConfig genericObjectPoolConfig = new GenericObjectPoolConfig();
+        JedisPool jedisPool = new JedisPool(genericObjectPoolConfig,jedisHost,jedisPort,timeout);
+        manager.setJedisPool(jedisPool);
         return manager;
     }
 

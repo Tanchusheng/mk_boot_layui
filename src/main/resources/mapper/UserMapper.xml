@@ -30,7 +30,7 @@
         </collection>
     </resultMap>
 
-    <select id="selectUserByMap" resultMap="UserMap" parameterType="java.util.Map">
+    <select id="queryUserByMap" resultMap="UserMap" parameterType="java.util.Map">
         select
         u.id,
         u.login_name,
