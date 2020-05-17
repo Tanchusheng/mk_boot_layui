@@ -28,7 +28,11 @@ public class UserServiceImpl extends ServiceImpl<UserDao,User> implements UserSe
     }
 
     @Override
-    public User findUserById(Long id) {
-        return null;
+    public User queryUserById(Long id) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("id",id);
+        return baseMapper.queryUserByMap(map);
     }
+
+
 }

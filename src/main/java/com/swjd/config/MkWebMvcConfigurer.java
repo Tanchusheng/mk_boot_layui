@@ -99,7 +99,7 @@ public class MkWebMvcConfigurer implements WebMvcConfigurer{
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new MyHandlerInterceptor())
                 .addPathPatterns("/**")
-                .excludePathPatterns("/api/login/main","/api/systemLogout","/api/genCaptcha","/api/getCaptchaVoice");
+                .excludePathPatterns("/api/login/main","/api/systemLogout","/api/genCaptcha","/api/getCaptchaVoice","/api/system/user/**");
 
     }
 }
