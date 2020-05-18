@@ -13,4 +13,6 @@ import java.util.Map;
  */
 public interface UserDao extends BaseMapper<User> {
     User queryUserByMap(Map<String,Object> map);
+
+
 }
