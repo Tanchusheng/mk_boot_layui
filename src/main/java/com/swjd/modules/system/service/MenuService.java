@@ -8,16 +8,17 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Description:
- * @Author: Tan.c.s
- * @Date: Created in 2020/5/18 10:14
- * @Version：1.0
+ * @ClassName MenuService
+ * @Description TODO
+ * @Author Tan
+ * @Date 2020/5/17 16:57
+ * @Version 1.0
  */
 public interface MenuService extends IService<Menu> {
 
     List<ShowMenu> getShowMenuByUser(Long id);
 
-    List<Menu> selectAllMenus(Map<String,Object> map);
+    List<Menu> queryAllMenu(Map<String,Object> map);
 
     int getCountByName(String name);
 

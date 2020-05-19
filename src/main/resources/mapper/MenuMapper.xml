@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.swjd.modules.system.dao.MenuDao" >
-
     <resultMap id="getSelf" type="com.swjd.modules.system.entity.Menu">
         <id property="id" column="id"/>
         <result property="name" column="name"/>
@@ -25,7 +24,6 @@
         <collection property="children" select="getMenus" column="{parentId = id,isShow = myIsShow}">
 
         </collection>
-
     </resultMap>
 
     <select id="getMenus" resultMap="getSelf">
@@ -71,11 +69,10 @@
         <result property="title"    column="title"/>
         <result property="icon"     column="icon"/>
         <result property="href"     column="href"/>
-        <collection property="children" select="selectShowMenuByUser"  column="{parentId = id,userId = myuserId}">
+        <collection property="children" select="queryShowMenuByUser"  column="{parentId = id,userId = myuserId}">
         </collection>
     </resultMap>
-
-    <select id="selectShowMenuByUser" resultMap="showMenuMap">
+    <select id="queryShowMenuByUser" resultMap="showMenuMap">
         SELECT
         distinct  m.id        as "id",
         m.parent_id as "pid",
@@ -103,5 +100,4 @@
         and m.is_show = true
         order by m.sort desc
     </select>
-
 </mapper>

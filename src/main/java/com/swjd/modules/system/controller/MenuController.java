@@ -1,7 +1,6 @@
 package com.swjd.modules.system.controller;
 
 import com.baomidou.mybatisplus.mapper.Condition;
-import com.google.common.collect.Maps;
 import com.swjd.base.BaseController;
 import com.swjd.modules.system.entity.Menu;
 import com.swjd.util.RestResponse;
@@ -11,39 +10,40 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @Description:
- * @Author: Tan.c.s
- * @Date: Created in 2020/5/18 10:12
- * @Version：1.0
+ * @ClassName MenuController
+ * @Description TODO
+ * @Author Tan
+ * @Date 2020/5/17 17:34
+ * @Version 1.0
  */
 @RestController
 @RequestMapping("/api/system/menu")
 public class MenuController extends BaseController {
+
     /**
-     * 功能描述：获取全部菜单列表
-     * @return
-     */
-    @RequestMapping("treelist")
-    public RestResponse treelist(){
-        Map<String,Object> map = Maps.newHashMap();
+     * 功能描述:获取全部菜单列表
+     * @Param: []
+     * @return: com.swjd.util.RestResponse
+     **/
+    @RequestMapping("/treeList")
+    public RestResponse treeList(){
+        Map<String,Object> map = new HashMap<>();
         map.put("parentId",null);
-        map.put("isShow",false);
-        return RestResponse.success().setData(menuService.selectAllMenus(map));
+        map.put("delFlag",false);
+        return RestResponse.success().setData(menuService.queryAllMenu(map));
     }
-
-
     /**
-     * 功能描述：添加菜单，包括添加父级菜单和子菜单
-     * @param menu
-     * @return
-     */
+     * 功能描述:添加菜单，包括添加父级菜单和子菜单
+     * @Param: [menu]
+     * @return: com.swjd.util.RestResponse
+     **/
     @RequiresPermissions("sys:menu:add")
-    @RequestMapping("add")
-    public RestResponse add(Menu menu){
-
+    @RequestMapping("/insertMenu")
+    public RestResponse insertMenu(Menu menu){
         if(StringUtils.isBlank(menu.getName())){
             return RestResponse.failure("菜单名称不能为空");
         }
@@ -89,13 +89,13 @@ public class MenuController extends BaseController {
     }
 
     /**
-     * 功能描述：编辑菜单
-     * @param menu
-     * @return
-     */
+     * 功能描述:编辑菜单
+     * @Param: [menu]
+     * @return: com.swjd.util.RestResponse
+     **/
     @RequiresPermissions("sys:menu:edit")
-    @RequestMapping("edit")
-    public RestResponse edit(Menu menu){
+    @RequestMapping("editMenu")
+    public RestResponse editMenu(Menu menu){
         if(null==menu.getId()){
             return RestResponse.failure("菜单ID不能为空");
         }
@@ -129,15 +129,9 @@ public class MenuController extends BaseController {
         return RestResponse.success();
 
     }
-
-    /**
-     * 功能描述：删除菜单
-     * @param id
-     * @return
-     */
     @RequiresPermissions("sys:menu:delete")
-    @RequestMapping("delete")
-    public RestResponse delete(@RequestParam(value = "id",required = true)Long id){
+    @RequestMapping("deleteMenu")
+    public RestResponse deleteMenu(@RequestParam(value = "id",required = true)Long id){
         if(null==id){
             return RestResponse.failure("菜单ID不能为空");
         }
@@ -147,4 +141,5 @@ public class MenuController extends BaseController {
 
         return RestResponse.success();
     }
+
 }

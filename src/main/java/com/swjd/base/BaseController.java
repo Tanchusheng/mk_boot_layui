@@ -8,38 +8,31 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * @Description:
- * @Author: Tan.c.s
- * @Date: Created in 2020/5/18 10:15
- * @Version：1.0
+ * @ClassName BaseController
+ * @Description TODO
+ * @Author Tan
+ * @Date 2020/5/17 16:45
+ * @Version 1.0
  */
 public class BaseController {
 
     @Autowired
-    protected UserService userService;
+    private UserService userService;
 
     @Autowired
     protected MenuService menuService;
-
-//    @Autowired
-//    protected RoleService roleService;
-//
-//    @Autowired
-//    protected LogService logService;
-
     /**
-     * 功能描述：获取当前用户信息
-     * @return
-     */
+     * 功能描述:获取当前用户信息
+     * @Param: []
+     * @return: User
+     **/
     public User getCurrentUser(){
-
         ShiroUser shiroUser = (ShiroUser) SecurityUtils.getSubject().getPrincipal();
-        if(null==shiroUser){
-            return null ;
+        if (shiroUser==null){
+            return null;
         }
 
-        User loginUser = userService.selectById(shiroUser.getId());
+        User loginUser =userService.queryUserById(shiroUser.getId());
         return loginUser;
     }
 }
-

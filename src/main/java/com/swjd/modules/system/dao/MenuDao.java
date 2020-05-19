@@ -8,14 +8,15 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Description:
- * @Author: Tan.c.s
- * @Date: Created in 2020/5/18 10:13
- * @Version：1.0
+ * @ClassName MenuDao
+ * @Description TODO
+ * @Author Tan
+ * @Date 2020/5/17 16:59
+ * @Version 1.0
  */
 public interface MenuDao extends BaseMapper<Menu> {
 
-    List<ShowMenu> selectShowMenuByUser(Map<String,Object> map);
+    List<ShowMenu> queryShowMenuByUser(Map<String,Object> map);
 
-    List<Menu> getMenus(Map map);
+    List<Menu> getMenus(Map<String,Object> map);
 }

@@ -32,7 +32,7 @@ public class MyHandlerInterceptor implements HandlerInterceptor {
             userService = (UserService) factory.getBean("userService");
 
         }
-        User user = userService.findUserById(SysUser.id());
+        User user = userService.queryUserById(SysUser.id());
         if(user != null){
             httpServletRequest.setAttribute("currentUser",user);
             return true;

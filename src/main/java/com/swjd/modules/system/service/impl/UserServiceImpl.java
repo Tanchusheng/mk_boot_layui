@@ -1,7 +1,6 @@
 package com.swjd.modules.system.service.impl;
 
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.google.common.collect.Maps;
 import com.swjd.modules.system.dao.UserDao;
 import com.swjd.modules.system.entity.User;
 import com.swjd.modules.system.service.UserService;
@@ -29,9 +28,11 @@ public class UserServiceImpl extends ServiceImpl<UserDao,User> implements UserSe
     }
 
     @Override
-    public User findUserById(Long id) {
-        Map<String,Object> map = Maps.newHashMap();
+    public User queryUserById(Long id) {
+        Map<String,Object> map = new HashMap<>();
         map.put("id",id);
         return baseMapper.queryUserByMap(map);
     }
+
+
 }
