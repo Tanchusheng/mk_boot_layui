@@ -52,6 +52,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuDao, Menu> implements MenuS
         return baseMapper.selectCount(wrapper);
     }
 
+    @Transactional(readOnly = false,rollbackFor = Exception.class)
     @Override
     public void saveOrUpdateMenu(Menu menu) {
         insertOrUpdate(menu);

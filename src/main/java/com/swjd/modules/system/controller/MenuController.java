@@ -29,7 +29,7 @@ public class MenuController extends BaseController {
      * @Param: []
      * @return: com.swjd.util.RestResponse
      **/
-    @RequestMapping("/treeList")
+    @RequestMapping("treeList")
     public RestResponse treeList(){
         Map<String,Object> map = new HashMap<>();
         map.put("parentId",null);
@@ -42,7 +42,7 @@ public class MenuController extends BaseController {
      * @return: com.swjd.util.RestResponse
      **/
     @RequiresPermissions("sys:menu:add")
-    @RequestMapping("/insertMenu")
+    @RequestMapping("insertMenu")
     public RestResponse insertMenu(Menu menu){
         if(StringUtils.isBlank(menu.getName())){
             return RestResponse.failure("菜单名称不能为空");

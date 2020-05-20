@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.enums.FieldFill;
 import com.baomidou.mybatisplus.enums.FieldStrategy;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.swjd.modules.system.entity.User;
 
 import java.util.Date;
 
@@ -26,7 +27,7 @@ public abstract class DataEntity<T extends Model> extends BaseEntity<T> {
     protected Date createDate;
 
     /*修改人*/
-    @TableField(value = "update_id",fill = FieldFill.INSERT_UPDATE)
+    @TableField(value = "update_by",fill = FieldFill.INSERT_UPDATE)
     protected Long updateId;
 
     /*修改时间*/
@@ -40,6 +41,34 @@ public abstract class DataEntity<T extends Model> extends BaseEntity<T> {
     /*备注*/
     @TableField(strategy = FieldStrategy.IGNORED)
     protected String remarks;
+
+    /**
+     * 创建着
+     */
+    @TableField(exist = false)
+    protected User createUser;
+
+    /**
+     * 修改者
+     */
+    @TableField(exist = false)
+    protected User updateUser;
+
+    public User getCreateUser() {
+        return createUser;
+    }
+
+    public void setCreateUser(User createUser) {
+        this.createUser = createUser;
+    }
+
+    public User getUpdateUser() {
+        return updateUser;
+    }
+
+    public void setUpdateUser(User updateUser) {
+        this.updateUser = updateUser;
+    }
 
     public DataEntity() {
         super();

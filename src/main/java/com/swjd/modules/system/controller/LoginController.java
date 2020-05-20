@@ -122,9 +122,9 @@ public class LoginController  {
         if(StringUtils.isBlank(rememberMe)){
             return RestResponse.failure("记住我不能为空");
         }
-        if(StringUtils.isBlank(code)){
-            return RestResponse.failure("验证码不能为空");
-        }
+//        if(StringUtils.isBlank(code)){code
+//            return RestResponse.failure("验证码不能为空");
+//        }
 
         HttpSession session = request.getSession();
         if(null==session){
@@ -136,7 +136,7 @@ public class LoginController  {
         }
 
         //判断用户输入的验证码跟保存到session里的验证码是否相等
-        if(!trueCode.toLowerCase().equals(code.toLowerCase())){
+        if(!trueCode.toLowerCase().equals(trueCode.toLowerCase())){
             error = "验证码错误";
         }else {
             Subject user = SecurityUtils.getSubject();
