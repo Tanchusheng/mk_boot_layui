@@ -129,6 +129,11 @@ public class MenuController extends BaseController {
         return RestResponse.success();
 
     }
+    /**
+     * 功能描述:删除菜单
+     * @Param: [id]
+     * @return: com.swjd.util.RestResponse
+     **/
     @RequiresPermissions("sys:menu:delete")
     @RequestMapping("deleteMenu")
     public RestResponse deleteMenu(@RequestParam(value = "id",required = true)Long id){
