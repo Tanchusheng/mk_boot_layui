@@ -1,0 +1,39 @@
+Index: src/main/java/com/swjd/modules/system/controller/MenuController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.swjd.modules.system.controller;\r\n\r\nimport com.baomidou.mybatisplus.mapper.Condition;\r\nimport com.swjd.base.BaseController;\r\nimport com.swjd.modules.system.entity.Menu;\r\nimport com.swjd.util.RestResponse;\r\nimport org.apache.commons.lang.StringUtils;\r\nimport org.apache.shiro.authz.annotation.RequiresPermissions;\r\nimport org.springframework.web.bind.annotation.RequestMapping;\r\nimport org.springframework.web.bind.annotation.RequestParam;\r\nimport org.springframework.web.bind.annotation.RestController;\r\n\r\nimport java.util.HashMap;\r\nimport java.util.Map;\r\n\r\n/**\r\n * @ClassName MenuController\r\n * @Description TODO\r\n * @Author Tan\r\n * @Date 2020/5/17 17:34\r\n * @Version 1.0\r\n */\r\n@RestController\r\n@RequestMapping(\"/api/system/menu\")\r\npublic class MenuController extends BaseController {\r\n\r\n    /**\r\n     * 功能描述:获取全部菜单列表\r\n     * @Param: []\r\n     * @return: com.swjd.util.RestResponse\r\n     **/\r\n    @RequestMapping(\"/treeList\")\r\n    public RestResponse treeList(){\r\n        Map<String,Object> map = new HashMap<>();\r\n        map.put(\"parentId\",null);\r\n        map.put(\"delFlag\",false);\r\n        return RestResponse.success().setData(menuService.queryAllMenu(map));\r\n    }\r\n    /**\r\n     * 功能描述:添加菜单，包括添加父级菜单和子菜单\r\n     * @Param: [menu]\r\n     * @return: com.swjd.util.RestResponse\r\n     **/\r\n    @RequiresPermissions(\"sys:menu:add\")\r\n    @RequestMapping(\"/insertMenu\")\r\n    public RestResponse insertMenu(Menu menu){\r\n        if(StringUtils.isBlank(menu.getName())){\r\n            return RestResponse.failure(\"菜单名称不能为空\");\r\n        }\r\n\r\n        if(menuService.getCountByName(menu.getName())>0){\r\n            return RestResponse.failure(\"菜单名称已存在\");\r\n        }\r\n\r\n        if(StringUtils.isNotBlank(menu.getPermission())){\r\n            if(menuService.getCountByPermission(menu.getPermission())>0){\r\n                return RestResponse.failure(\"权限标识已经存在\");\r\n            }\r\n        }\r\n\r\n        //处理菜单排序\r\n        if(menu.getParentId()==null){\r\n            menu.setLevel(1);\r\n            Object o = menuService.selectObj(Condition.create().setSqlSelect(\"max(sort)\").isNull(\"parent_id\"));\r\n            int sort = 0;\r\n            if(null!=o){\r\n                sort = (Integer) o+10;\r\n            }\r\n            menu.setSort(sort);\r\n        }else{\r\n            Menu parentMenu = menuService.selectById(menu.getParentId());\r\n            if(null==parentMenu){\r\n                return RestResponse.failure(\"父菜单不存在\");\r\n            }\r\n\r\n            menu.setParentIds(parentMenu.getParentIds());\r\n            menu.setLevel(parentMenu.getLevel()+1);\r\n            Object o = menuService.selectObj(Condition.create()\r\n                    .setSqlSelect(\"max(sort)\")\r\n                    .eq(\"parent_id\",menu.getParentId()));\r\n            int sort = 0;\r\n            if(null!=o){\r\n                sort = (Integer) o+10;\r\n            }\r\n            menu.setSort(sort);\r\n        }\r\n        menuService.saveOrUpdateMenu(menu);\r\n        return RestResponse.success();\r\n    }\r\n\r\n    /**\r\n     * 功能描述:编辑菜单\r\n     * @Param: [menu]\r\n     * @return: com.swjd.util.RestResponse\r\n     **/\r\n    @RequiresPermissions(\"sys:menu:edit\")\r\n    @RequestMapping(\"editMenu\")\r\n    public RestResponse editMenu(Menu menu){\r\n        if(null==menu.getId()){\r\n            return RestResponse.failure(\"菜单ID不能为空\");\r\n        }\r\n\r\n        if (StringUtils.isBlank(menu.getName())) {\r\n            return RestResponse.failure(\"菜单名称不能为空\");\r\n        }\r\n\r\n        Menu oldMenu = menuService.selectById(menu.getId());\r\n\r\n        if(!oldMenu.getName().equals(menu.getName())){\r\n            if(menuService.getCountByName(menu.getName())>0){\r\n                return RestResponse.failure(\"菜单名称已存在\");\r\n            }\r\n\r\n        }\r\n\r\n        if (StringUtils.isNotBlank(menu.getPermission())) {\r\n            if(!oldMenu.getPermission().equals(menu.getPermission())) {\r\n                if (menuService.getCountByPermission(menu.getPermission()) > 0) {\r\n                    return RestResponse.failure(\"权限标识已经存在\");\r\n                }\r\n            }\r\n        }\r\n\r\n        if(null==menu.getSort()){\r\n            return RestResponse.failure(\"排序值不能为空\");\r\n        }\r\n\r\n        menuService.saveOrUpdateMenu(menu);\r\n        return RestResponse.success();\r\n\r\n    }\r\n    @RequiresPermissions(\"sys:menu:delete\")\r\n    @RequestMapping(\"deleteMenu\")\r\n    public RestResponse deleteMenu(@RequestParam(value = \"id\",required = true)Long id){\r\n        if(null==id){\r\n            return RestResponse.failure(\"菜单ID不能为空\");\r\n        }\r\n        Menu menu = menuService.selectById(id);\r\n        menu.setDelFlag(true);\r\n        menuService.saveOrUpdateMenu(menu);\r\n\r\n        return RestResponse.success();\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/swjd/modules/system/controller/MenuController.java	(revision b00b00c99604ed21edab0e1a1c1493f11ead7f5e)
++++ src/main/java/com/swjd/modules/system/controller/MenuController.java	(date 1589804920380)
+@@ -29,7 +29,7 @@
+      * @Param: []
+      * @return: com.swjd.util.RestResponse
+      **/
+-    @RequestMapping("/treeList")
++    @RequestMapping("treeList")
+     public RestResponse treeList(){
+         Map<String,Object> map = new HashMap<>();
+         map.put("parentId",null);
+@@ -42,7 +42,7 @@
+      * @return: com.swjd.util.RestResponse
+      **/
+     @RequiresPermissions("sys:menu:add")
+-    @RequestMapping("/insertMenu")
++    @RequestMapping("insertMenu")
+     public RestResponse insertMenu(Menu menu){
+         if(StringUtils.isBlank(menu.getName())){
+             return RestResponse.failure("菜单名称不能为空");
+@@ -129,6 +129,11 @@
+         return RestResponse.success();
+ 
+     }
++    /**
++     * 功能描述:删除菜单
++     * @Param: [id]
++     * @return: com.swjd.util.RestResponse
++     **/
+     @RequiresPermissions("sys:menu:delete")
+     @RequestMapping("deleteMenu")
+     public RestResponse deleteMenu(@RequestParam(value = "id",required = true)Long id){
