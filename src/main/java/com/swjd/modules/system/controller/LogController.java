@@ -32,6 +32,7 @@ import java.util.Map;
 public class LogController extends BaseController {
     private static final Logger LOGGER = LoggerFactory.getLogger(LogController.class);
 
+    @PostMapping(value = "list")
     public LayerData<Log> list (@RequestParam(value = "page",defaultValue = "1")Integer page,
                                 @RequestParam(value = "limit",defaultValue = "10")Integer limit,
                                 ServletRequest request){
@@ -75,4 +76,6 @@ public class LogController extends BaseController {
         logService.deleteBatchIds(ids);
         return RestResponse.success();
     }
+
+
 }

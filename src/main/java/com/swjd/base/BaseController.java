@@ -1,6 +1,7 @@
 package com.swjd.base;
 
 import com.swjd.modules.system.entity.User;
+import com.swjd.modules.system.service.LogService;
 import com.swjd.modules.system.service.MenuService;
 import com.swjd.modules.system.service.RoleService;
 import com.swjd.modules.system.service.UserService;
@@ -26,8 +27,8 @@ public class BaseController {
     @Autowired
     protected RoleService roleService;
 
-//    @Autowired
-//    protected LogService logService;
+    @Autowired
+    protected LogService logService;
     /**
      * 功能描述:获取当前用户信息
      * @Param: []
