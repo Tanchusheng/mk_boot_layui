@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Date;
 
 /**
- * @Description:mybatisplus自定义填充公共字段 ,即没有传的字段自动填充
+ * @Description: mybatisplus自定义填充公共字段 ,即没有传的字段自动填充
  * @Author: Tan.c.s
  * @Date: Created in 2020/5/11 9:47
  * @Version：1.0

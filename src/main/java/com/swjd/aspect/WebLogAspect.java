@@ -27,6 +27,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -68,6 +70,19 @@ public class WebLogAspect {
         sysLog.setHttpMethod(request.getMethod());
         //获取传入目标方法的参数
         Object[] args = joinPoint.getArgs();
+        Class DOClass  = args.getClass();
+        Method[] methods = args.getClass().getDeclaredMethods();
+        Method[] allMethods = DOClass.getDeclaredMethods();
+        List<Method> originalMethod = filterField(allMethods);
+        List<Method> modifyMethod = filterField(args.getClass().getDeclaredMethods());
+        for (int i = 0; i < originalMethod.size(); i++) {
+            Method original = originalMethod.get(i);
+            Method modify = modifyMethod.get(i);
+//            Object originalObj = original.invoke(backupObj);
+//            Object modifyObj = modify.invoke(args);
+        }
+
+
         for(int i = 0;i<args.length;i++){
             Object o = args[i];
             if(o instanceof ServletRequest ||(o instanceof ServletResponse)|| o instanceof MultipartFile){
@@ -156,5 +171,30 @@ public class WebLogAspect {
             sysLog.setException(e.getMessage());
             throw e;
         }
+    }
+    /**
+     * 过滤掉创建修改字段
+     *
+     * @param allMethods
+     * @return
+     */
+    public static List<Method> filterField(Method[] allMethods) {
+        List<Method> listMethod = new ArrayList<Method>();
+        for (Method tempMethod : allMethods) {
+            String methodName = tempMethod.getName();
+            if (methodName.indexOf("get") != -1) {
+                if ((methodName.indexOf("getCreatedBy") != -1)
+                        || (methodName.indexOf("getCreatedDate") != -1)
+                        || (methodName.indexOf("getUpdateBy") != -1)
+                        || (methodName.indexOf("getUpdateDate") != -1)) {
+                    continue;
+                }
+                Class[] parameterTypes = tempMethod.getParameterTypes();
+                if (parameterTypes.length == 0) {
+                    listMethod.add(tempMethod);
+                }
+            }
+        }
+        return listMethod;
     }
 }

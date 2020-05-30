@@ -122,7 +122,14 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/mk_boot_layui?useUnicode=true&characterEncoding=utf8&useSSL=false&tinyInt1isBit=true
     username: root
     password: root
-
+  # mongodb配置
+  data:
+    mongodb:
+      host: 127.0.0.1:3306
+      port: 27017
+      database: aop-demo
+      repositories:
+        enabled: true
 #日志
 logging:
   config: classpath:log/logback.xml

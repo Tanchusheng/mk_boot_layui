@@ -2,6 +2,7 @@ package com.swjd.modules.system.controller;
 
 
 import com.google.common.collect.Maps;
+import com.swjd.annotation.SysLog;
 import com.swjd.util.BaiduAiUtil;
 import com.swjd.util.Constants;
 import com.swjd.util.RestResponse;
@@ -96,7 +97,7 @@ public class LoginController  {
      **/
     @RequestMapping(value = "/login/main",produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    //@SysLog("用户登录")
+    @SysLog("用户登录")
     public RestResponse loginMain(HttpServletRequest request){
         LOGGER.info("用户登录------login/main:0");
         //用户名称
